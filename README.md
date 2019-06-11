@@ -15,7 +15,7 @@ Cs-137 | 14-6759 | 37kBq | 11/2014 | 33kBq
 Co-60 | 14-6758 | 37kBq | 10/2014 | 20kBq       
 Co-60 | 14-6766 | 37kBq | 10/2014 | 20kBq
 
-In addition, thoriated welding rods are used as a calibration source. Twelve 1-inch pieces of 4mm thick welding rods surround the scintillator crystal in a 3D-printed holder, around the front end of the detector (away from the photomultimplier).
+In addition, thoriated welding rods are used as a calibration source. Twelve 1-inch pieces of 4mm thick welding rods surround the scintillator crystal in a 3D-printed holder, around the front end of the detector (away from the photomultiplier).
 
 ## Measurements to Create a Lookup Table
 
@@ -37,7 +37,7 @@ Energy (keV) | Source
 
 The resulting lookup table was used for the following measurements.
 
-Using the same sources, and the Python calibration/lookup routines, 150 measurement (same number of counts, 2^18) were carried out using a Mirion Osprey Base on June 07, 2019. The results are stored in `osprey-35mm-na-cs`.
+Using the same sources, and the Python calibration/lookup routines, 150 measurement (same number of counts, 2^18) were carried out using a Mirion Osprey Base on June 07, 2019. The results are stored in `osprey-35mm-na-cs`. For this measurement, Fine and Coarse Gain of the Osprey were set to 1. The high voltage was set to 870V. The recorded 4096 channels are condensed into 256 channels by a python script to allow for better comparison.
 
 ## Measurements for "reference"/"valid" and "invalid" items
 

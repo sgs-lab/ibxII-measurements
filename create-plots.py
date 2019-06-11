@@ -74,7 +74,7 @@ def loadrawdata(metadata):
                 data[x]['raw'] = getunmodifieddata_multiple(metadata, x)
             data[x]['apple'] = getdata_multiple(metadata, x)
         if metadata[x][META_TYPE] == DTYPE_NOAPPLE_CAL:
-            data[x]['raw'] = getdata_multiple(metadata, x)
+            data[x]['raw'] = getunmodifieddata_multiple(metadata, x)
         if metadata[x][META_TYPE] == DTYPE_OSPREY:
             data[x]['raw'] = getospreydata_multiple(metadata, x)
         if metadata[x][META_DROPLAST]:
@@ -187,10 +187,10 @@ osplookuppeaks = [[2614.511, 226, 6, 220, 235, 5],
 ################################################################################
 
 metadata = {'lookup1': ['lookup-35mm-na-cs-01-data',
-                        'Na-22 and Cs-137, 35mm', 75, DTYPE_APPLE_CAL, 4 * 2 ** 16, 0, False,
+                        'Na-22 and Cs-137, 35mm', 75, DTYPE_NOAPPLE_CAL, 4 * 2 ** 16, 0, False,
                         calibrationpeak, lookuppeaks, ['lookup1', 'lookup2']],
             'lookup2': ['lookup-35mm-na-cs-02-data',
-                        'Na-22 and Cs-137, 35mm', 75, DTYPE_APPLE_CAL, 4 * 2 ** 16, 0, False,
+                        'Na-22 and Cs-137, 35mm', 75, DTYPE_NOAPPLE_CAL, 4 * 2 ** 16, 0, False,
                         calibrationpeak, lookuppeaks, ['lookup1', 'lookup2']],
             'valid1': ['valid-35mm-coco-01-data',
                       '2 Co-60 sources, 35mm', 75, DTYPE_APPLE_CAL, 4 * 2 ** 16, 0, False,
@@ -383,7 +383,7 @@ ax.plot(range(ibxzeros, ibxendzeros), ibx[ibxzeros:ibxendzeros], label = "IBX II
 plotdefault()
 nacspeaklines()
 plt.legend()
-plt.savefig("unused-fig3-osprey-vs-ibxII-thpeak-adjusted.pdf")
+plt.savefig("unused-osprey-vs-ibxII-thpeak-adjusted.pdf")
 plt.show()
 
 ratio = sum(osp) / sum(ibx)
@@ -424,14 +424,15 @@ osp = intcal.average(data['osp-nacs']['lookup'])
 ibx = intcal.average(data['lookup1']['lookup'] + data['lookup2']['lookup'])
 
 peaks = [[170, 330],
-         [480, 720],
+         [440, 600],
+         [550, 780],
          [1200, 1350],
          [2450, 2800]]
 
-fig, ax = plt.subplots(1, 4)
-fig.set_size_inches(20, 8)
+fig, ax = plt.subplots(1, 5)
+fig.set_size_inches(25, 8)
 
-for i in range(4):
+for i in range(5):
     s = int(peaks[i][0] * 226 / 2614.511)
     e = int(peaks[i][1] * 226 / 2614.511)
     ax[i].plot(energyx[s:e], ibx[s:e])
@@ -440,10 +441,10 @@ for i in range(4):
 plt.savefig("unused-figure-resolution-ibxii.pdf")
 plt.show()
 
-fig, ax = plt.subplots(1, 4)
-fig.set_size_inches(20, 8)
+fig, ax = plt.subplots(1, 5)
+fig.set_size_inches(25, 8)
 
-for i in range(4):
+for i in range(5):
     s = int(peaks[i][0] * 226 / 2614.511)
     e = int(peaks[i][1] * 226 / 2614.511)
     ax[i].plot(energyx[s:e], osp[s:e])
@@ -478,6 +479,36 @@ ax.plot(range(pdatazeros, pdataendzeros), pdata[pdatazeros:pdataendzeros])
 plotdefault()
 copeaklines()
 plt.savefig("fig4-invalid-vs-template.pdf", transparent=True)
+plt.show()
+
+################################################################################
+# Compare one invalid against one valid
+i = 0
+pdata = invalid[i]
+pdata2 = valid[i]
+
+pdatazeros = 0
+while(pdata[pdatazeros] == 0.0):
+    pdatazeros += 1
+pdataendzeros = 255
+while(pdata[pdataendzeros] == 0.0):
+    pdataendzeros -= 1
+pdataendzeros += 1
+
+pdata2zeros = 0
+while(pdata2[pdata2zeros] == 0.0):
+    pdata2zeros += 1
+pdata2endzeros = 255
+while(pdata2[pdata2endzeros] == 0.0):
+    pdata2endzeros -= 1
+pdata2endzeros += 1
+
+fig, ax = plt.subplots()
+ax.plot(range(pdata2zeros, pdata2endzeros), pdata2[pdata2zeros:pdata2endzeros])
+ax.plot(range(pdatazeros, pdataendzeros), pdata[pdatazeros:pdataendzeros])
+plotdefault()
+copeaklines()
+plt.savefig("unused-invalid-vs-valid.pdf", transparent=True)
 plt.show()
 
 ################################################################################
@@ -524,7 +555,7 @@ for i in range(len(binlist)):
     
 
 plotdefault()
-plt.savefig("unused-figure-invalid-in-bins.pdf")
+plt.savefig("unused-figure-invalid-bins-bars.pdf")
 plt.show()
 
 ################################################################################
@@ -558,7 +589,7 @@ ax.axvline(x[-1], color=binlinecolor, linewidth=0.7)
     
 ax.plot(range(pdatazeros, pdataendzeros), pdata[pdatazeros:pdataendzeros])
 
-bins = intcal.bindata(invalid[idx], binlist)
+bins = intcal.bindata(pdata, binlist)
 
 avbins = [bins[i] / (binlist0[i+1] - binlist0[i]) for i in range(len(binlist))]
 
@@ -567,7 +598,116 @@ for i in range(len(binlist)):
     ax.text(binlist0[i] + binwidth[i] / 2, avbins[i] / 2, "0x{:06X}".format(int(bins[i])), rotation="vertical", horizontalalignment="center")
 
 plotdefault()
-plt.savefig("fig5-invalid-bins.pdf")
+plt.savefig("unused-invalid-bins.pdf")
+plt.show()
+
+out = ""
+for i in intcal.bindata(pdata, binlist):
+    out += "0x{:06X} ".format(int(i))
+print(out)
+
+################################################################################
+# Make bins for template
+# lines instead of bars - even better for illustrator
+
+barchartenergy = [0] + binlist
+
+pdata = template
+pdatazeros = 0
+while(pdata[pdatazeros] == 0.0):
+    pdatazeros += 1
+pdataendzeros = 255
+while(pdata[pdataendzeros] == 0.0):
+    pdataendzeros -= 1
+pdataendzeros += 1
+
+fig, ax = plt.subplots()
+last = 0
+count = 0
+for i in binlist:
+    ax.axvspan(last, i, facecolor=bincolor, alpha=alphaselection[count % 2],zorder=0)
+    last = i
+    count += 1
+
+x = [0] + binlist
+for i in range(len(x) - 1):
+    ax.axvline(x[i], color=binlinecolor, linewidth=0.7)
+ax.axvline(x[-1], color=binlinecolor, linewidth=0.7)
+    
+ax.plot(range(pdatazeros, pdataendzeros), pdata[pdatazeros:pdataendzeros])
+
+bins = intcal.bindata(pdata, binlist)
+
+avbins = [bins[i] / (binlist0[i+1] - binlist0[i]) for i in range(len(binlist))]
+
+ax.step(barchartenergy, [avbins[0]] + avbins)
+for i in range(len(binlist)):
+    ax.text(binlist0[i] + binwidth[i] / 2, avbins[i] / 2, "0x{:06X}".format(int(bins[i])), rotation="vertical", horizontalalignment="center")
+
+plotdefault()
+plt.savefig("unused-template-bins.pdf")
+plt.show()
+
+out = ""
+for i in intcal.bindata(template, binlist):
+    out += "0x{:06X} ".format(int(i))
+print(out)
+
+################################################################################
+# Make bins for one invalid and the template
+# lines instead of bars - even better for illustrator
+
+barchartenergy = [0] + binlist
+
+idx = 0
+pdata = invalid[idx]
+pdatazeros = 0
+while(pdata[pdatazeros] == 0.0):
+    pdatazeros += 1
+pdataendzeros = 255
+while(pdata[pdataendzeros] == 0.0):
+    pdataendzeros -= 1
+pdataendzeros += 1
+
+pdata2 = template
+pdata2zeros = 0
+while(pdata2[pdata2zeros] == 0.0):
+    pdata2zeros += 1
+pdata2endzeros = 255
+while(pdata2[pdata2endzeros] == 0.0):
+    pdata2endzeros -= 1
+pdata2endzeros += 1
+
+fig, ax = plt.subplots()
+last = 0
+count = 0
+for i in binlist:
+    ax.axvspan(last, i, facecolor=bincolor, alpha=alphaselection[count % 2],zorder=0)
+    last = i
+    count += 1
+
+x = [0] + binlist
+for i in range(len(x) - 1):
+    ax.axvline(x[i], color=binlinecolor, linewidth=0.7)
+ax.axvline(x[-1], color=binlinecolor, linewidth=0.7)
+    
+ax.plot(range(pdatazeros, pdataendzeros), pdata[pdatazeros:pdataendzeros])
+
+bins = intcal.bindata(pdata, binlist)
+avbins = [bins[i] / (binlist0[i+1] - binlist0[i]) for i in range(len(binlist))]
+
+ax.step(barchartenergy, [avbins[0]] + avbins, label="Invalid Item")
+for i in range(len(binlist)):
+    ax.text(binlist0[i] + binwidth[i] / 2, avbins[i] / 2, "0x{:06X}".format(int(bins[i])), rotation="vertical", horizontalalignment="center")
+
+
+templatebins = intcal.bindata(pdata2, binlist)
+templateavbins = [templatebins[i] / (binlist0[i+1] - binlist0[i]) for i in range(len(binlist))]
+ax.step(barchartenergy, [templateavbins[0]] + templateavbins, label="Template")
+
+plotdefault()
+plt.legend()
+plt.savefig("fig5-invalid-template-bins.pdf")
 plt.show()
 
 ################################################################################
@@ -595,7 +735,8 @@ ax.hist(invalidChiSList, range = (0, 800), bins = 120, label="Invalid Item", col
 
 plt.grid(linestyle=":")
 
-ylim = 55
+# ylim = 55
+ylim = 60
 xlim = 800
 plt.ylim(0 - 0.03 * ylim, ylim + 0.03 * ylim)
 plt.xlim(0 - 0.02 * xlim, xlim + 0.02 * xlim)
@@ -612,7 +753,7 @@ ax.hist(invalidChiSList, range = (0, 800), bins = 120, label="Invalid Item", col
 
 plt.grid(linestyle=":")
 
-ylim = 55
+ylim = 60
 xlim = 800
 plt.ylim(0 - 0.03 * ylim, ylim + 0.03 * ylim)
 plt.xlim(0 - 0.02 * xlim, xlim + 0.02 * xlim)
@@ -622,4 +763,5 @@ plt.ylim(0 - 0.03 * ylim, ylim + 0.03 * ylim)
 plt.xlim(0 - 0.02 * xlim, xlim + 0.02 * xlim)
 plt.savefig("unused-figure-valid-invalid-margins-hex.pdf")
 plt.show()
+
 

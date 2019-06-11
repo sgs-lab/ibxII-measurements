@@ -288,7 +288,7 @@ ax.plot(data['valid1']['lookup'][i], label="Python Lookup")
 plotdefault()
 copeaklines()
 plt.legend()
-plt.savefig("unused-figure-lookup-test.pdf")
+plt.savefig("figures/unused-figure-lookup-test.pdf")
 plt.show()
 
 ################################################################################
@@ -364,7 +364,7 @@ ax.plot(range(ibxzeros, ibxendzeros), ibx[ibxzeros:ibxendzeros], label = "IBX II
 plotdefault()
 nacspeaklines()
 plt.legend()
-plt.savefig("unused-figure-osprey-vs-ibxII.pdf")
+plt.savefig("figures/unused-figure-osprey-vs-ibxII.pdf")
 plt.show()
 
 
@@ -383,7 +383,7 @@ ax.plot(range(ibxzeros, ibxendzeros), ibx[ibxzeros:ibxendzeros], label = "IBX II
 plotdefault()
 nacspeaklines()
 plt.legend()
-plt.savefig("unused-osprey-vs-ibxII-thpeak-adjusted.pdf")
+plt.savefig("figures/unused-osprey-vs-ibxII-thpeak-adjusted.pdf")
 plt.show()
 
 ratio = sum(osp) / sum(ibx)
@@ -401,7 +401,7 @@ ax.plot(range(ibxzeros, ibxendzeros), ibx[ibxzeros:ibxendzeros], label = "IBX II
 plotdefault()
 nacspeaklines()
 plt.legend()
-plt.savefig("fig3-osprey-vs-ibxII-counts-adjusted.pdf")
+plt.savefig("figures/fig3-osprey-vs-ibxII-counts-adjusted.pdf")
 plt.show()
 
 
@@ -415,7 +415,7 @@ ax.plot(range(ibxzeros, ibxendzeros), ibx[ibxzeros:ibxendzeros], label = "IBX II
 plotdefault()
 nacspeaklines()
 plt.legend()
-plt.savefig("unused-figure-osprey-vs-ibxII-space.pdf")
+plt.savefig("figures/unused-figure-osprey-vs-ibxII-space.pdf")
 plt.show()
 
 ## measure resolution
@@ -438,7 +438,7 @@ for i in range(5):
     ax[i].plot(energyx[s:e], ibx[s:e])
     ax[i].grid()
     ax[i].set_ylim(ymin=0)
-plt.savefig("unused-figure-resolution-ibxii.pdf")
+plt.savefig("figures/unused-figure-resolution-ibxii.pdf")
 plt.show()
 
 fig, ax = plt.subplots(1, 5)
@@ -450,7 +450,7 @@ for i in range(5):
     ax[i].plot(energyx[s:e], osp[s:e])
     ax[i].grid()
     ax[i].set_ylim(ymin=0)
-plt.savefig("unused-figure-resolution-osp.pdf")
+plt.savefig("figures/unused-figure-resolution-osp.pdf")
 plt.show()
 
 ################################################################################
@@ -478,7 +478,7 @@ ax.plot(range(templatezeros, templateendzeros), template[templatezeros:templatee
 ax.plot(range(pdatazeros, pdataendzeros), pdata[pdatazeros:pdataendzeros])
 plotdefault()
 copeaklines()
-plt.savefig("fig4-invalid-vs-template.pdf", transparent=True)
+plt.savefig("figures/fig4-invalid-vs-template.pdf", transparent=True)
 plt.show()
 
 ################################################################################
@@ -508,7 +508,7 @@ ax.plot(range(pdata2zeros, pdata2endzeros), pdata2[pdata2zeros:pdata2endzeros])
 ax.plot(range(pdatazeros, pdataendzeros), pdata[pdatazeros:pdataendzeros])
 plotdefault()
 copeaklines()
-plt.savefig("unused-invalid-vs-valid.pdf", transparent=True)
+plt.savefig("figures/unused-invalid-vs-valid.pdf", transparent=True)
 plt.show()
 
 ################################################################################
@@ -555,7 +555,7 @@ for i in range(len(binlist)):
     
 
 plotdefault()
-plt.savefig("unused-figure-invalid-bins-bars.pdf")
+plt.savefig("figures/unused-figure-invalid-bins-bars.pdf")
 plt.show()
 
 ################################################################################
@@ -598,7 +598,7 @@ for i in range(len(binlist)):
     ax.text(binlist0[i] + binwidth[i] / 2, avbins[i] / 2, "0x{:06X}".format(int(bins[i])), rotation="vertical", horizontalalignment="center")
 
 plotdefault()
-plt.savefig("unused-invalid-bins.pdf")
+plt.savefig("figures/unused-invalid-bins.pdf")
 plt.show()
 
 out = ""
@@ -645,7 +645,7 @@ for i in range(len(binlist)):
     ax.text(binlist0[i] + binwidth[i] / 2, avbins[i] / 2, "0x{:06X}".format(int(bins[i])), rotation="vertical", horizontalalignment="center")
 
 plotdefault()
-plt.savefig("unused-template-bins.pdf")
+plt.savefig("figures/unused-template-bins.pdf")
 plt.show()
 
 out = ""
@@ -707,7 +707,7 @@ ax.step(barchartenergy, [templateavbins[0]] + templateavbins, label="Template")
 
 plotdefault()
 plt.legend()
-plt.savefig("fig5-invalid-template-bins.pdf")
+plt.savefig("figures/fig5-invalid-template-bins.pdf")
 plt.show()
 
 ################################################################################
@@ -740,7 +740,7 @@ ylim = 60
 xlim = 800
 plt.ylim(0 - 0.03 * ylim, ylim + 0.03 * ylim)
 plt.xlim(0 - 0.02 * xlim, xlim + 0.02 * xlim)
-plt.savefig("fig6-valid-invalid-margins.pdf")
+plt.savefig("figures/fig6-valid-invalid-margins.pdf")
 plt.show()
 
 fig, ax = plt.subplots()
@@ -761,7 +761,7 @@ plt.xlim(0 - 0.02 * xlim, xlim + 0.02 * xlim)
 plt.xticks(range(0, xlim, 96), ["0x{:X}".format(i) for i in range(0, xlim, 96)])
 plt.ylim(0 - 0.03 * ylim, ylim + 0.03 * ylim)
 plt.xlim(0 - 0.02 * xlim, xlim + 0.02 * xlim)
-plt.savefig("unused-figure-valid-invalid-margins-hex.pdf")
+plt.savefig("figures/unused-figure-valid-invalid-margins-hex.pdf")
 plt.show()
 
 

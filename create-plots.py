@@ -1,13 +1,10 @@
 ##%%
 import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1 import Divider, LocatableAxes, Size
 import numpy as np
 import sys
 import pandas as pd
 import os
 import copy
-
-from mpl_toolkits.axes_grid1 import Divider, LocatableAxes, Size
 
 import intcal
 
